@@ -6,6 +6,11 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+    "types": ["ethers"]
+  },
+  //  "include": ["./test", "./src", "./scripts"],
+  "include": ["./deploy/*.ts", "./test/*.ts", "./scripts/*.ts"],
+  "files": ["./hardhat.config.ts"]
+   
 }
