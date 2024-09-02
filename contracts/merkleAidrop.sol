@@ -8,7 +8,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract merkleAirdrop{
 
     address immutable tokenAddress;
+    address owner;
     bytes32 immutable merkleRoot;
+
 
     constructor(address _tokenAddress, bytes32 _merkleRoot){
         require(_tokenAddress != address(0),"invalid address");
@@ -16,11 +18,20 @@ contract merkleAirdrop{
 
         tokenAddress = _tokenAddress;
         merkleRoot = _merkleRoot;
+        owner = msg.sender;
     }
 
     mapping(address => bool) public isClaimed;
+    event claimSuccessful(address indexed account, uint256 indexed amount);
+    event merkleRootUpdated(bytes32 indexed merkleRoot);
+
+    modifier onlyOwner {
+        require(owner == msg.sender, "You are Not the owner");
+        _;
+    }
 
     function claim(uint256 amount, address account, bytes32[] calldata merkleProof) external {
+        
         require(!isClaimed[account], "Already claimed");
 
         bytes32 node = keccak256(abi.encodePacked(amount, account));
@@ -31,5 +42,14 @@ contract merkleAirdrop{
         isClaimed[account] = true;
 
         require(IERC20(tokenAddress).transfer(account, amount), "Transfer failed");
+        emit claimSuccessful(account, amount);
+    }
+
+    //updating merkel root
+
+    function updateMerkleRoot(bytes32 newMerkleRoot) external onlyOwner{
+        require(newMerkleRoot != bytes32(0),"invalid merkle root");
+        merkleRoot == newMerkleRoot;
+        emit merkleRootUpdated(newMerkleRoot);
     }
 }

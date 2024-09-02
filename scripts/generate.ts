@@ -70,8 +70,9 @@ async function main() {
     await generateAddresses();
     try {
         const addresses = await readFromCsv();
+        
         console.log(`Found ${addresses.length} addresses in the CSV`);
-        console.log(JSON.stringify(addresses.slice(0, 5), null, 2)); // Print first 5 addresses
+        console.log(JSON.stringify(addresses.slice(0, 5), null, 2)); 
 
         // Create a Merkle Tree from the addresses and print the root hash
         const leaves = await readFromCsv();
