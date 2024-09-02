@@ -66,11 +66,8 @@ async function readFromCsv(): Promise<Buffer[]>{
 
 // Main execution
 async function main() {
-    console.log("Generating addresses...");
+    console.log("Generating addresses");
     await generateAddresses();
-    console.log("Addresses generated and saved to airdrop.csv");
-
-    console.log("\nReading addresses from CSV...");
     try {
         const addresses = await readFromCsv();
         console.log(`Found ${addresses.length} addresses in the CSV`);
@@ -82,10 +79,12 @@ async function main() {
 
         const root = merkleTree.getHexRoot();
         console.log("Merkle Root:", root);
+        
     } catch (error) {
         console.error("Error reading from CSV:", error);
     }
 }
 
 main().catch(console.error);
+
 
