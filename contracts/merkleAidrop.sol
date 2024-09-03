@@ -35,10 +35,10 @@ contract merkleAirdrop{
         
         require(!isClaimed[account], "Already claimed");
 
-        bytes32 node = keccak256(abi.encodePacked(amount, account));
-        bool isVerified = MerkleProof.verifyCalldata(merkleProof, merkleRoot, node);
-        
-        require(isVerified, "Verification failed");
+        bytes32 node = keccak256(bytes.concat(keccak256(abi.encode(msg.sender, amount))));
+
+        bool isValidProof = MerkleProof.verify(merkleProof, merkleRoot, node);
+        require(isValidProof, "Verification failed");
 
         isClaimed[account] = true;
         totalTokensClaimed += amount;

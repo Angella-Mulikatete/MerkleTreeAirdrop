@@ -11,21 +11,6 @@ interface AddressData {
   amount: number;
 }
 
-// Function to generate random addresses and amounts
-// async function generateAddresses(): Promise<void> {
-//   const addresses: AddressData[] = [];
-
-//   for (let i = 0; i < NUM_ADDRESSES; i++) {
-//     const wallet = ethers.Wallet.createRandom();
-//     const address = wallet.address;
-//     const amount = Math.floor(Math.random() * (MAX_AMOUNT - MIN_AMOUNT + 1)) + MIN_AMOUNT;
-//     addresses.push({ address, amount });
-//   }
-
-//   // Write addresses and amounts to CSV file
-//   const csvContent = "address,amount\n" + addresses.map(e => `${e.address},${e.amount}`).join("\n");
-//   fs.writeFileSync("airdrop.csv", csvContent, "utf8");
-// }
 
 // Function to read addresses and amounts from CSV file
 async function readFromCsv(): Promise<AddressData[]> {
