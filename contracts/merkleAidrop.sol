@@ -31,20 +31,20 @@ contract merkleAirdrop{
         _;
     }
 
-    function claim(uint256 amount, address account, bytes32[] calldata merkleProof) external {
-        
-        require(!isClaimed[account], "Already claimed");
+  function claim(uint256 amount,  bytes32[] calldata merkleProof) external{
+        require(!isClaimed[msg.sender], "Already claimed");
 
+        // bytes32 node = keccak256(abi.encodePacked(account, amount));
         bytes32 node = keccak256(bytes.concat(keccak256(abi.encode(msg.sender, amount))));
 
         bool isValidProof = MerkleProof.verify(merkleProof, merkleRoot, node);
-        require(isValidProof, "Verification failed");
 
-        isClaimed[account] = true;
-        totalTokensClaimed += amount;
+       require(isValidProof, "Merkle proof is invalid");
 
-        require(IERC20(tokenAddress).transfer(account, amount), "Transfer failed");
-        emit claimSuccessful(account, amount);
+       isClaimed[msg.sender] = true;
+
+       IERC20(tokenAddress).transfer(msg.sender, amount);
+            
     }
 
     //updating merkel root

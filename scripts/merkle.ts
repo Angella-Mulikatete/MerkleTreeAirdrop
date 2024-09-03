@@ -2,9 +2,7 @@ import { ethers } from 'hardhat';
 import fs from 'fs';
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 
-const NUM_ADDRESSES = 20;
-const MIN_AMOUNT = 150;
-const MAX_AMOUNT = 1000;
+
 
 interface AddressData {
   address: string;
@@ -50,10 +48,10 @@ async function generateProofs() {
 //   await generateAddresses();
 
   try {
-    const balances = await readFromCsv();
+    const leaves = await readFromCsv();
 
-    // Prepare values for Merkle tree
-    const values = balances.map(balance => [balance.address, balance.amount.toString()]);
+    // Get values for Merkle tree
+    const values = leaves.map(balance => [balance.address, balance.amount.toString()]);
 
     // Generate Merkle tree
     const tree = StandardMerkleTree.of(values, ["address", "uint256"]);
