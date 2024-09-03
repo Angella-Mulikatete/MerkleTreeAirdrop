@@ -7,9 +7,10 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract merkleAirdrop{
 
+    bytes32 immutable merkleRoot;
     address immutable tokenAddress;
     address owner;
-    bytes32 immutable merkleRoot;
+    uint256 totalTokensClaimed;
 
 
     constructor(address _tokenAddress, bytes32 _merkleRoot){
@@ -40,6 +41,7 @@ contract merkleAirdrop{
         require(isVerified, "Verification failed");
 
         isClaimed[account] = true;
+        totalTokensClaimed += amount;
 
         require(IERC20(tokenAddress).transfer(account, amount), "Transfer failed");
         emit claimSuccessful(account, amount);
@@ -51,5 +53,11 @@ contract merkleAirdrop{
         require(newMerkleRoot != bytes32(0),"invalid merkle root");
         merkleRoot == newMerkleRoot;
         emit merkleRootUpdated(newMerkleRoot);
+    }
+
+    //withdrawing the remaining balances
+    function withdrawBalance() external onlyOwner{
+       uint256 balance =  IERC20(tokenAddress).balanceOf(address(this));
+       require(IERC20(tokenAddress).transfer(msg.sender, balance), "Transfer failed");
     }
 }
