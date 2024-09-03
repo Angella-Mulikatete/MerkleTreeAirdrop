@@ -51,7 +51,7 @@ async function generateProofs() {
     const leaves = await readFromCsv();
 
     // Get values for Merkle tree
-    const values = leaves.map(balance => [balance.address, balance.amount.toString()]);
+    const values = leaves.map(leaf => [leaf.address, leaf.amount.toString()]);
 
     // Generate Merkle tree
     const tree = StandardMerkleTree.of(values, ["address", "uint256"]);
